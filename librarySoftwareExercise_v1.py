@@ -69,9 +69,6 @@ def add_book():
     author = input("Enter the new book's Author: ").title()
     dewey = input("Enter the new book's dewey code: ").upper()
     isbn = input("Enter the new book's ISBN: ")
-    while not int(isbn):
-        print("Sorry, but the ISBN must contain only numbers.")
-        isbn = input("Enter the new book's ISBN: ")
     Book(title, author, dewey, isbn)
     print(f"{title} has been added to the book list.")
 
@@ -103,8 +100,29 @@ def lend_book():
         book = find_book()
         if book.available:
             confirm = input("Type 'Y' if you want to borrow this book: ").upper()
-            if confirm  == "Y":
+            if confirm == "Y":
                 print(f"{book.title} is now on loan to {user.name}.")
+                book.available = False
+                book.borrower = user.name
+                user.borrowed_books.append(book.title)
+            else:
+                print(f"Sorry, '{book.title}' is already on loan.")
+
+
+def return_book():
+    user = find_user()
+    print()
+    if user:
+        book = find_book()
+        if book.title in user.borrowed_books:
+            confirm = input("Type 'Y' if you want to borrow this book: ").upper()
+            if confirm == "Y":
+                print(f"{book.title} has been returned to the library.")
+                book.available = True
+                book.borrower = user.name
+                user.borrowed_books.remove(book.title)
+            else:
+                print(f"Sorry, '{book.title}' is on loan to someone else.")
 
 
 # Main Routine...
@@ -119,6 +137,28 @@ User("John", "12 Example St")
 User("Susan", "1011 Binary Rd")
 User("Paul", "25 Appletree Dr")
 User("Mary", "8 Moon Cres")
+
+# User menu
+new_action = True
+while new_action:
+    print()
+    print(f"1. Lend a book")
+    print(f"2. Return a book")
+    print(f"3. Add a user")
+    print(f"4. Add a book")
+    print(f"5. Exit")
+    print()
+    choice = input("What would you like to do? Enter a number (1-5): ")
+    if choice == "1":
+        lend_book()
+    elif choice == "2":
+        return_book()
+    elif choice == "3":
+        add_user()
+    elif choice == "4":
+        add_book()
+    elif choice == "5":
+        print("\n*** That is not a valid choice ***")
 
 find_book()
 # find_user()
