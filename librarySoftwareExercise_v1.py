@@ -159,10 +159,3 @@ while new_action:
         add_book()
     elif choice == "5":
         print("\n*** That is not a valid choice ***")
-
-find_book()
-# find_user()
-# add_book()
-# print_info()
-# add_user()
-# print_user()
